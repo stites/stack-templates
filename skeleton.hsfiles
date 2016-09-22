@@ -1,0 +1,347 @@
+{-# START_FILE package.yaml #-}
+name: {{name}}
+version: 0.1.0.0
+
+ghc-options: -Wall
+
+default-extensions:
+  - BangPatterns
+  - LambdaCase
+  - OverloadedStrings
+  - ViewPatterns
+
+dependencies:
+  - base
+
+library:
+  source-dirs: src
+
+tests:
+  doctest:
+    main: DocTest.hs
+    source-dirs: test
+    dependencies:
+      - {{name}}
+      - doctest
+
+  spec:
+    main: Spec.hs
+    source-dirs: test
+    dependencies:
+      - {{name}}
+      - hspec
+
+{-# START_FILE test/DocTest.hs #-}
+module Main where
+
+import Test.DocTest
+
+main :: IO ()
+main = doctest
+  [ "-XBangPatterns"
+  , "-XLambdaCase"
+  , "-XOverloadedStrings"
+  , "-XViewPatterns"
+  , "src"
+  ]
+
+{-# START_FILE test/Spec.hs #-}
+{-# OPTIONS_GHC -F -pgmF hspec-discover #-}
+
+{-# START_FILE README.md #-}
+## {{name}}}
+[![Build Status](https://travis-ci.org/{{github-username}}/{{name}}.svg?branch=master)](https://travis-ci.org/{{github-username}}/{{name}})
+{-# START_FILE LICENSE #-}
+Copyright (c) {{copyright}}, {{author-name}}
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+this list of conditions and the following disclaimer in the documentation
+and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its contributors
+may be used to endorse or promote products derived from this software without
+specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+{-# START_FILE .gitignore #-}
+# Created by https://www.gitignore.io/api/haskell,vim,macos,linux,tags,emacs
+
+### Haskell ###
+dist
+dist-*
+cabal-dev
+*.o
+*.hi
+*.chi
+*.chs.h
+*.dyn_o
+*.dyn_hi
+.hpc
+.hsenv
+.cabal-sandbox/
+cabal.sandbox.config
+*.prof
+*.aux
+*.hp
+*.eventlog
+.stack-work/
+cabal.project.local
+.HTF/
+
+
+### Vim ###
+# swap
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+# session
+Session.vim
+# temporary
+.netrwhist
+*~
+# auto-generated tag files
+tags
+
+
+### macOS ###
+*.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network\ Trash\ Folder
+Temporary\ Items
+.apdisk
+
+
+### Linux ###
+*~
+
+# temporary files which can be created if a process still has a handle open of a deleted file
+.fuse_hidden*
+
+# KDE directory preferences
+.directory
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
+
+
+### Tags ###
+# Ignore tags created by etags, ctags, gtags (GNU global) and cscope
+TAGS
+.TAGS
+!TAGS/
+tags
+.tags
+!tags/
+gtags.files
+GTAGS
+GRTAGS
+GPATH
+GSYMS
+cscope.files
+cscope.out
+cscope.in.out
+cscope.po.out
+
+
+
+### Emacs ###
+# -*- mode: gitignore; -*-
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Org-mode
+.org-id-locations
+*_archive
+
+# flymake-mode
+*_flymake.*
+
+# eshell files
+/eshell/history
+/eshell/lastdir
+
+# elpa packages
+/elpa/
+
+# reftex files
+*.rel
+
+# AUCTeX auto folder
+/auto/
+
+# cask packages
+.cask/
+dist/
+
+# Flycheck
+flycheck_*.el
+
+# server auth directory
+/server/
+
+# projectiles files
+.projectile
+
+{-# START_FILE .travis.yml #-}
+# curl 
+sudo: false
+
+language: c
+
+cache:
+  directories:
+  - $HOME/.ghc
+  - $HOME/.cabal
+  - $HOME/.stack
+
+matrix:
+  include:
+  - env: BUILD=cabal GHCVER=7.8.4 CABALVER=1.18 HAPPYVER=1.19.5 ALEXVER=3.1.7
+    compiler: ": #GHC 7.8.4"
+    addons: {apt: {packages: [cabal-install-1.18,ghc-7.8.4,happy-1.19.5,alex-3.1.7], sources: [hvr-ghc]}}
+  - env: BUILD=cabal GHCVER=7.10.3 CABALVER=1.22 HAPPYVER=1.19.5 ALEXVER=3.1.7
+    compiler: ": #GHC 7.10.3"
+    addons: {apt: {packages: [cabal-install-1.22,ghc-7.10.3,happy-1.19.5,alex-3.1.7], sources: [hvr-ghc]}}
+  - env: BUILD=cabal GHCVER=8.0.1 CABALVER=1.24 HAPPYVER=1.19.5 ALEXVER=3.1.7
+    compiler: ": #GHC 8.0.1"
+    addons: {apt: {packages: [cabal-install-1.24,ghc-8.0.1,happy-1.19.5,alex-3.1.7], sources: [hvr-ghc]}}
+
+  - env: BUILD=cabal GHCVER=head  CABALVER=head HAPPYVER=1.19.5 ALEXVER=3.1.7
+    compiler: ": #GHC HEAD"
+    addons: {apt: {packages: [cabal-install-head,ghc-head,happy-1.19.5,alex-3.1.7], sources: [hvr-ghc]}}
+
+  - env: BUILD=stack ARGS=""
+    compiler: ": #stack default"
+    addons: {apt: {packages: [ghc-7.10.3], sources: [hvr-ghc]}}
+  - env: BUILD=stack ARGS="--resolver lts-2"
+    compiler: ": #stack 7.8.4"
+    addons: {apt: {packages: [ghc-7.8.4], sources: [hvr-ghc]}}
+  - env: BUILD=stack ARGS="--resolver lts-3"
+    compiler: ": #stack 7.10.2"
+    addons: {apt: {packages: [ghc-7.10.2], sources: [hvr-ghc]}}
+  - env: BUILD=stack ARGS="--resolver lts-5"
+    compiler: ": #stack 7.10.3"
+    addons: {apt: {packages: [ghc-7.10.3], sources: [hvr-ghc]}}
+
+  - env: BUILD=stack ARGS="--resolver nightly"
+    compiler: ": #stack nightly"
+    addons: {apt: {packages: [libgmp,libgmp-dev]}}
+
+  allow_failures:
+  - env: BUILD=cabal GHCVER=head  CABALVER=head HAPPYVER=1.19.5 ALEXVER=3.1.7
+  - env: BUILD=stack ARGS="--resolver nightly"
+
+before_install:
+# Using compiler above sets CC to an invalid value, so unset it
+- unset CC
+
+# We want to always allow newer versions of packages when building on GHC HEAD
+- CABALARGS=""
+- if [ "x$GHCVER" = "xhead" ]; then CABALARGS=--allow-newer; fi
+
+# Download and unpack the stack executable
+- export PATH=/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:$HOME/.local/bin:/opt/alex/$ALEXVER/bin:/opt/happy/$HAPPYVER/bin:$HOME/.cabal/bin:$PATH
+- mkdir -p ~/.local/bin
+- |
+  if [ `uname` = "Darwin" ]
+  then
+    travis_retry curl --insecure -L https://www.stackage.org/stack/osx-x86_64 | tar xz --strip-components=1 --include '*/stack' -C ~/.local/bin
+  else
+    travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+  fi
+
+  # Use the more reliable S3 mirror of Hackage
+  mkdir -p $HOME/.cabal
+  echo 'remote-repo: hackage.haskell.org:http://hackage.fpcomplete.com/' > $HOME/.cabal/config
+  echo 'remote-repo-cache: $HOME/.cabal/packages' >> $HOME/.cabal/config
+
+  if [ "$CABALVER" != "1.16" ]
+  then
+    echo 'jobs: $ncpus' >> $HOME/.cabal/config
+  fi
+
+# Get the list of packages from the stack.yaml file
+- PACKAGES=$(stack --install-ghc query locals | grep '^ *path' | sed 's@^ *path:@@')
+
+install:
+- echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
+- if [ -f configure.ac ]; then autoreconf -i; fi
+- |
+  set -ex
+  case "$BUILD" in
+    stack)
+      stack --no-terminal --install-ghc $ARGS test --bench --only-dependencies
+      ;;
+    cabal)
+      cabal --version
+      travis_retry cabal update
+      cabal install --only-dependencies --enable-tests --enable-benchmarks --force-reinstalls --ghc-options=-O0 --reorder-goals --max-backjumps=-1 $CABALARGS $PACKAGES
+      ;;
+  esac
+  set +ex
+
+script:
+- |
+  set -ex
+  case "$BUILD" in
+    stack)
+      stack --no-terminal $ARGS test --bench --no-run-benchmarks --haddock --no-haddock-deps
+      ;;
+    cabal)
+      cabal install --enable-tests --enable-benchmarks --force-reinstalls --ghc-options=-O0 --reorder-goals --max-backjumps=-1 $CABALARGS $PACKAGES
+
+      ORIGDIR=$(pwd)
+      for dir in $PACKAGES
+      do
+        cd $dir
+        cabal check || [ "$CABALVER" == "1.16" ]
+        cabal sdist
+        SRC_TGZ=$(cabal info . | awk '{print $2;exit}').tar.gz && \
+          (cd dist && cabal install --force-reinstalls "$SRC_TGZ")
+        cd $ORIGDIR
+      done
+      ;;
+  esac
+  set +ex
