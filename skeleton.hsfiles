@@ -347,14 +347,8 @@ script:
   set +ex
 
 {-# START_FILE .sosrc #-}
-- pattern: app/(.*)\.hs
-  command: stack build
-
 - pattern: .*\.hs
   command: codex update --force
-
-- pattern: package.yaml
-  command: hpack
 
 - pattern: test/(.*)\.hs
   command: stack test --test-arguments "--color"
