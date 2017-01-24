@@ -49,7 +49,7 @@ main = doctest
 {-# OPTIONS_GHC -F -pgmF hspec-discover #-}
 
 {-# START_FILE README.md #-}
-## {{name}}}
+## {{name}}
 [![Build Status](https://travis-ci.org/{{github-username}}/{{name}}.svg?branch=master)](https://travis-ci.org/{{github-username}}/{{name}})
 {-# START_FILE LICENSE #-}
 Copyright (c) {{copyright}}, {{author-name}}
@@ -345,19 +345,6 @@ script:
       ;;
   esac
   set +ex
-
-{-# START_FILE .sosrc #-}
-- pattern: .*\.hs
-  command: codex update --force
-
-- pattern: test/(.*)\.hs
-  command: stack test --test-arguments "--color"
-
-- pattern:
-  - app/.*\.hs
-  - src/.*\.hs
-  command:
-  - hlint \0
 
 {-# START_FILE Makefile #-}
 ifndef GHCID_SIZE
