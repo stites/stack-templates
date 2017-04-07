@@ -2,7 +2,8 @@
 name: {{name}}
 version: 0.1.0.0
 
-ghc-options: -Wall
+ghc-options: -optl-fuse-ld=gold -Wall
+ld-options:  -fuse-ld=gold
 
 default-extensions:
   - BangPatterns
